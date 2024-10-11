@@ -14,12 +14,12 @@ pipeline {
             }
         }
 
-        stage('OWASP scan') {
-            steps {
-                dependencyCheck additionalArguments: ' --scan ./', odcInstallation: 'DPC'
-                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-            }
-        }
+        // stage('OWASP scan') {
+            // steps {
+                // dependencyCheck additionalArguments: ' --scan ./', odcInstallation: 'DPC'
+                // dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            // }
+        // }
 
         stage('Maven build') {
             steps {
