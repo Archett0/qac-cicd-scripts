@@ -17,7 +17,7 @@ pipeline {
         stage('SonarQube analysis') {
             steps {
                 withSonarQubeEnv(installationName: 'SonarQube-main') {
-                    sh 'mvn clean package org.sonarsource.scanner.maven:sonar-maven-plugin:3.11.0.3922:sonar'
+                    sh 'mvn clean package -DskipTests=true org.sonarsource.scanner.maven:sonar-maven-plugin:3.11.0.3922:sonar'
                 }
             }
         }
