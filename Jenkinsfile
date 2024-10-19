@@ -73,6 +73,11 @@ pipeline {
 //                 }
             }
         }
+        stage('Trigger CD pipeline') {
+            steps {
+                build wait: false, propagate: false, job: 'qac-cd-pipeline', waitForStart: true
+            }
+        }
     }
     post {
         always {
