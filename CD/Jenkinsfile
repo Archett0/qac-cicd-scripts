@@ -16,11 +16,11 @@ pipeline {
                         sh "kubectl --namespace=default apply -f qnac-consul-deployment.yaml"
                         sh "kubectl --namespace=default apply -f qnac-consul-service.yaml"
                     }
-                    dir('gateway') {
+                    dir('qnac-gateway') {
                         sh "kubectl --namespace=default apply -f qnac-gateway-deployment.yaml"
                         sh "kubectl --namespace=default apply -f qnac-gateway-service.yaml"
                     }
-                    dir('QnA') {
+                    dir('qnac-qna') {
                         sh "kubectl --namespace=default apply -f qnac-qna-deployment.yaml"
                     }
                 }
