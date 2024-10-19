@@ -11,16 +11,18 @@ pipeline {
         }
         stage('Apply to AWS EKS') {
             steps {
-                dir('qnac-consul') {
-                    sh "kubectl --namespace=default apply -f qnac-consul-deployment.yaml"
-                    sh "kubectl --namespace=default apply -f qnac-consul-service.yaml"
-                }
-                dir('gateway') {
-                    sh "kubectl --namespace=default apply -f qnac-gateway-deployment.yaml"
-                    sh "kubectl --namespace=default apply -f qnac-gateway-service.yaml"
-                }
-                dir('QnA') {
-                    sh "kubectl --namespace=default apply -f qnac-qna-deployment.yaml"
+                withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'e046f63b-a53a-4c53-bbc5-cbcd1c97c379', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                    dir('qnac-consul') {
+                        sh "kubectl --namespace=default apply -f qnac-consul-deployment.yaml"
+                        sh "kubectl --namespace=default apply -f qnac-consul-service.yaml"
+                    }
+                    dir('gateway') {
+                        sh "kubectl --namespace=default apply -f qnac-gateway-deployment.yaml"
+                        sh "kubectl --namespace=default apply -f qnac-gateway-service.yaml"
+                    }
+                    dir('QnA') {
+                        sh "kubectl --namespace=default apply -f qnac-qna-deployment.yaml"
+                    }
                 }
             }
         }
