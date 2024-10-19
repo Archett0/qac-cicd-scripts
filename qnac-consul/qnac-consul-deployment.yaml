@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: consul
+  labels:
+    app: consul
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: consul
+  template:
+    metadata:
+      name: consul
+      labels:
+        app: consul
+    spec:
+      containers:
+        - name: consul
+          image: consul:1.15.4
+          command: ["consul", "agent", "-server", "-bootstrap-expect=1", "-ui", "-client=0.0.0.0", "-data-dir=/consul/data"]
+          ports:
+            - containerPort: 8500
+              protocol: TCP
+            - containerPort: 8600
+              protocol: UDP
+          volumeMounts:
+            - mountPath: /consul/data
+              name: consul-data
+      restartPolicy: Always
+      volumes:
+        - name: consul-data
+          emptyDir: {}
