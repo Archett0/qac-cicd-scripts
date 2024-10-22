@@ -51,10 +51,15 @@ pipeline {
                     sh "docker tag qnac/qna-service:latest public.ecr.aws/v0c3x7n3/qnac/qna-service:latest"
                     sh "docker push public.ecr.aws/v0c3x7n3/qnac/qna-service:latest"
                 }
+                dir('search') {
+                    sh "docker build -t qnac/search-service ."
+                    sh "docker tag qnac/search-service:latest public.ecr.aws/v0c3x7n3/qnac/search-service:latest"
+                    sh "docker push public.ecr.aws/v0c3x7n3/qnac/search-service:latest"
+                }
 //                 dir('event') {
-//                     sh ""
-//                     sh ""
-//                     sh ""
+//                     sh "docker build -t qnac/event-service ."
+//                     sh "docker tag qnac/event-service:latest public.ecr.aws/v0c3x7n3/qnac/event-service:latest"
+//                     sh "docker push public.ecr.aws/v0c3x7n3/qnac/event-service:latest"
 //                 }
 //                 dir('user') {
 //                     sh ""
@@ -62,11 +67,6 @@ pipeline {
 //                     sh ""
 //                 }
 //                 dir('vote') {
-//                     sh ""
-//                     sh ""
-//                     sh ""
-//                 }
-//                 dir('search') {
 //                     sh ""
 //                     sh ""
 //                     sh ""

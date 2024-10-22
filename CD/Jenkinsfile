@@ -23,6 +23,12 @@ pipeline {
                     dir('qnac-qna') {
                         sh "kubectl --namespace=default apply -f qnac-qna-deployment.yaml"
                     }
+                    dir('qnac-search') {
+                        sh "kubectl --namespace=default apply -f qnac-search-deployment.yaml"
+                    }
+//                     dir('qnac-event') {
+//                         sh "kubectl --namespace=default apply -f qnac-event-deployment.yaml"
+//                     }
                 }
             }
         }
