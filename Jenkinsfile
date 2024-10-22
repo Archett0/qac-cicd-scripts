@@ -22,7 +22,7 @@ pipeline {
         }
         stage('OWASP scan') {
             steps {
-                dependencyCheck additionalArguments: ' --scan ./', odcInstallation: 'DPC'
+                dependencyCheck additionalArguments: ' --scan ./', nvdCredentialsId: '2e7f308f-5310-4393-b4e9-fb2bd91a3122', odcInstallation: 'DPC'
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
