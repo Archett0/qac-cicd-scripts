@@ -29,6 +29,9 @@ pipeline {
                     dir('qnac-event') {
                         sh "kubectl --namespace=default apply -f qnac-event-deployment.yaml"
                     }
+                    dir('qnac-vote') {
+                        sh "kubectl --namespace=default apply -f qnac-vote-deployment.yaml"
+                    }
                 }
             }
         }

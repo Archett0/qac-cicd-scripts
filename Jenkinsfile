@@ -61,12 +61,12 @@ pipeline {
                     sh "docker tag qnac/event-service:latest public.ecr.aws/v0c3x7n3/qnac/event-service:latest"
                     sh "docker push public.ecr.aws/v0c3x7n3/qnac/event-service:latest"
                 }
+                dir('vote') {
+                    sh "docker build -t qnac/vote-service ."
+                    sh "docker tag qnac/vote-service:latest public.ecr.aws/v0c3x7n3/qnac/vote-service:latest"
+                    sh "docker push public.ecr.aws/v0c3x7n3/qnac/vote-service:latest"
+                }
 //                 dir('user') {
-//                     sh ""
-//                     sh ""
-//                     sh ""
-//                 }
-//                 dir('vote') {
 //                     sh ""
 //                     sh ""
 //                     sh ""
