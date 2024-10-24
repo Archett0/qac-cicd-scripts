@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user
+  labels:
+    app: user
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user
+  template:
+    metadata:
+      name: user
+      labels:
+        app: user
+    spec:
+      containers:
+        - name: user
+          image: public.ecr.aws/v0c3x7n3/qnac/user-service:latest
+      restartPolicy: Always
+      

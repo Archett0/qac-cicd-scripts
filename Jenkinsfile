@@ -66,11 +66,11 @@ pipeline {
                     sh "docker tag qnac/vote-service:latest public.ecr.aws/v0c3x7n3/qnac/vote-service:latest"
                     sh "docker push public.ecr.aws/v0c3x7n3/qnac/vote-service:latest"
                 }
-//                 dir('user') {
-//                     sh ""
-//                     sh ""
-//                     sh ""
-//                 }
+                dir('user') {
+                    sh "docker build -t qnac/user-service ."
+                    sh "docker tag qnac/user-service:latest public.ecr.aws/v0c3x7n3/qnac/user-service:latest"
+                    sh "docker push public.ecr.aws/v0c3x7n3/qnac/user-service:latest"
+                }
             }
         }
         stage('Trigger CD pipeline') {
