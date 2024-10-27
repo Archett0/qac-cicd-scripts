@@ -18,5 +18,6 @@ spec:
       containers:
         - name: event
           image: public.ecr.aws/v0c3x7n3/qnac/event-service:latest
+          imagePullPolicy: Always
       restartPolicy: Always
       

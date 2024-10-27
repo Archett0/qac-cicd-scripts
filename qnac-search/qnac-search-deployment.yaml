@@ -18,5 +18,6 @@ spec:
       containers:
         - name: search
           image: public.ecr.aws/v0c3x7n3/qnac/search-service:latest
+          imagePullPolicy: Always
       restartPolicy: Always
       
