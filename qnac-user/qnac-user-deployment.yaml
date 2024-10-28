@@ -19,5 +19,8 @@ spec:
         - name: user
           image: public.ecr.aws/v0c3x7n3/qnac/user-service:latest
           imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: "50m"
       restartPolicy: Always
       

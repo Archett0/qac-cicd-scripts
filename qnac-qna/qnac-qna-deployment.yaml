@@ -19,5 +19,8 @@ spec:
         - name: qna
           image: public.ecr.aws/v0c3x7n3/qnac/qna-service:latest
           imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: "100m"
       restartPolicy: Always
       
