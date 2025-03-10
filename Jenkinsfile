@@ -10,13 +10,13 @@ pipeline {
         stage('Git checkout') {
             steps {
                 // Get code from GitHub repository
-                git branch: 'yc-https', changelog: false, poll: false, url: 'https://github.com/Archett0/qac-sec.git'
+                git branch: 'sec-sdlc', changelog: false, poll: false, url: 'https://github.com/Archett0/qac-sec.git'
             }
         }
         stage('SonarQube analysis') {
             steps {
                 withSonarQubeEnv(installationName: 'SonarQube-main') {
-                    sh 'mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:3.11.0.3922:sonar'
+                    bat 'mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:3.11.0.3922:sonar'
                 }
             }
         }
@@ -29,55 +29,29 @@ pipeline {
         stage('Maven build') {
             steps {
                 echo 'Only a test build'
-                sh "mvn clean install -DskipTests=true"
+                bat "mvn clean install -DskipTests=true"
             }
         }
-//         stage('Auth to AWS ECR') {
-//             steps {
-//                 withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'e046f63b-a53a-4c53-bbc5-cbcd1c97c379', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-//                     sh "aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/v0c3x7n3"
-//                 }
-//             }
-//         }
-//         stage('Build and push images') {
-//             steps {
-//                 dir('gateway') {
-//                     sh "docker build -t qnac/gateway ."
-//                     sh "docker tag qnac/gateway:latest public.ecr.aws/v0c3x7n3/qnac/gateway:latest"
-//                     sh "docker push public.ecr.aws/v0c3x7n3/qnac/gateway:latest"
-//                 }
-//                 dir('QnA') {
-//                     sh "docker build -t qnac/qna-service ."
-//                     sh "docker tag qnac/qna-service:latest public.ecr.aws/v0c3x7n3/qnac/qna-service:latest"
-//                     sh "docker push public.ecr.aws/v0c3x7n3/qnac/qna-service:latest"
-//                 }
-//                 dir('search') {
-//                     sh "docker build -t qnac/search-service ."
-//                     sh "docker tag qnac/search-service:latest public.ecr.aws/v0c3x7n3/qnac/search-service:latest"
-//                     sh "docker push public.ecr.aws/v0c3x7n3/qnac/search-service:latest"
-//                 }
-//                 dir('event') {
-//                     sh "docker build -t qnac/event-service ."
-//                     sh "docker tag qnac/event-service:latest public.ecr.aws/v0c3x7n3/qnac/event-service:latest"
-//                     sh "docker push public.ecr.aws/v0c3x7n3/qnac/event-service:latest"
-//                 }
-//                 dir('vote') {
-//                     sh "docker build -t qnac/vote-service ."
-//                     sh "docker tag qnac/vote-service:latest public.ecr.aws/v0c3x7n3/qnac/vote-service:latest"
-//                     sh "docker push public.ecr.aws/v0c3x7n3/qnac/vote-service:latest"
-//                 }
-//                 dir('user') {
-//                     sh "docker build -t qnac/user-service ."
-//                     sh "docker tag qnac/user-service:latest public.ecr.aws/v0c3x7n3/qnac/user-service:latest"
-//                     sh "docker push public.ecr.aws/v0c3x7n3/qnac/user-service:latest"
-//                 }
-//             }
-//         }
-//         stage('Trigger CD pipeline') {
-//             steps {
-//                 build wait: false, propagate: false, job: 'qac-cd-pipeline', waitForStart: true
-//             }
-//         }
+        stage('Build images') {
+            steps {
+                bat 'docker build -t qac-sec-api-gateway gateway/'
+                bat 'docker build -t qac-sec-qna QnA/'
+                bat 'docker build -t qac-sec-event event/'
+                bat 'docker build -t qac-sec-search search/'
+                bat 'docker build -t qac-sec-user user/'
+                bat 'docker build -t qac-sec-vote vote/'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                bat 'docker run -d --name gateway --network qac_default --label project=qac-sec-services -p 8080:8080 qac-sec-api-gateway'
+                bat 'docker run -d --name qna --network qac_default --label project=qac-sec-services qac-sec-qna'
+                bat 'docker run -d --name event --network qac_default --label project=qac-sec-services qac-sec-event'
+                bat 'docker run -d --name search --network qac_default --label project=qac-sec-services qac-sec-search'
+                bat 'docker run -d --name user --network qac_default --label project=qac-sec-services qac-sec-user'
+                bat 'docker run -d --name vote --network qac_default --label project=qac-sec-services qac-sec-vote'
+            }
+        }
     }
     post {
         always {
