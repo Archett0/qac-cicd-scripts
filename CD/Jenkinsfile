@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Authenticate to GCP') {
             steps {
-                withCredentials([file(credentialsId: 'gcp-k8s-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+                withCredentials([file(credentialsId: 'smr-k8s-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
                     sh '''
                         gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
                         gcloud config set project mimetic-codex-460815-g8
