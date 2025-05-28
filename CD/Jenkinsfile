@@ -2,49 +2,45 @@ pipeline {
     agent any
 
     stages {
-        stage('Update kubeconfig') {
+        stage('Authenticate to GCP') {
             steps {
-                withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'e046f63b-a53a-4c53-bbc5-cbcd1c97c379', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-                    sh "aws eks update-kubeconfig --name qnac-k8s"
+                withCredentials([file(credentialsId: 'gcp-k8s-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+                    sh '''
+                        gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
+                        gcloud config set project mimetic-codex-460815-g8
+                        gcloud config set compute/zone us-central1-a
+                        gcloud container clusters get-credentials smr-cluster
+                    '''
                 }
             }
         }
         stage('Apply to AWS EKS') {
             steps {
-                withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'e046f63b-a53a-4c53-bbc5-cbcd1c97c379', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-                    dir('qnac-consul') {
-                        sh "kubectl --namespace=default apply -f qnac-consul-deployment.yaml"
-                        sh "kubectl --namespace=default apply -f qnac-consul-service.yaml"
-                    }
-                    dir('qnac-gateway') {
-                        sh "kubectl --namespace=default apply -f qnac-gateway-deployment.yaml"
-                        sh "kubectl --namespace=default apply -f qnac-gateway-service.yaml"
-                    }
-                    dir('qnac-qna') {
-                        sh "kubectl --namespace=default apply -f qnac-qna-deployment.yaml"
-                    }
-                    dir('qnac-search') {
-                        sh "kubectl --namespace=default apply -f qnac-search-deployment.yaml"
-                    }
-                    dir('qnac-event') {
-                        sh "kubectl --namespace=default apply -f qnac-event-deployment.yaml"
-                    }
-                    dir('qnac-vote') {
-                        sh "kubectl --namespace=default apply -f qnac-vote-deployment.yaml"
-                    }
-                    dir('qnac-user') {
-                        sh "kubectl --namespace=default apply -f qnac-user-deployment.yaml"
-                    }
+                dir('smr-consul') {
+                    sh "kubectl --namespace=default apply -f smr-consul-deployment.yaml"
+                    sh "kubectl --namespace=default apply -f smr-consul-service.yaml"
+                }
+                dir('smr-cloudgateway') {
+                    sh "kubectl --namespace=default apply -f smr-cloudgateway-deployment.yaml"
+                    sh "kubectl --namespace=default apply -f smr-cloudgateway-service.yaml"
+                }
+                dir('smr-listingservice') {
+                    sh "kubectl --namespace=default apply -f smr-listingservice-deployment.yaml"
+                    sh "kubectl --namespace=default apply -f smr-listingservice-service.yaml"
+                }
+                dir('smr-userservice') {
+                    sh "kubectl --namespace=default apply -f smr-userservice-deployment.yaml"
+                    sh "kubectl --namespace=default apply -f smr-userservice-service.yaml"
                 }
             }
         }
-        stage('Get API Gateway Endpoint') {
-            steps {
-                withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'e046f63b-a53a-4c53-bbc5-cbcd1c97c379', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-                    sh "kubectl get svc api-gateway"
-                }
-            }
-        }
+//         stage('Get API Gateway Endpoint') {
+//             steps {
+//                 withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'e046f63b-a53a-4c53-bbc5-cbcd1c97c379', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+//                     sh "kubectl get svc api-gateway"
+//                 }
+//             }
+//         }
     }
     post {
         always {

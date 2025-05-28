@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+  labels:
+    app: user-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      name: user-service
+      labels:
+        app: user-service
+    spec:
+      containers:
+        - name: user
+          image: us-central1-docker.pkg.dev/mimetic-codex-460815-g8/smr-repo/userservice:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8081
+              protocol: TCP
+          resources:
+            requests:
+              cpu: "100m"
+      restartPolicy: Always
+      

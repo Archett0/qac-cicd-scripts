@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: listing-service
+  labels:
+    app: listing-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: listing-service
+  template:
+    metadata:
+      name: listing-service
+      labels:
+        app: listing-service
+    spec:
+      containers:
+        - name: listing
+          image: us-central1-docker.pkg.dev/mimetic-codex-460815-g8/smr-repo/listingservice:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8082
+              protocol: TCP
+          resources:
+            requests:
+              cpu: "100m"
+      restartPolicy: Always
+      
