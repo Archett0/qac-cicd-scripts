@@ -14,7 +14,7 @@ pipeline {
                 }
             }
         }
-        stage('Apply to AWS EKS') {
+        stage('Apply to GKE') {
             steps {
                 dir('smr-consul') {
                     sh "kubectl --namespace=default apply -f smr-consul-deployment.yaml"
@@ -34,13 +34,11 @@ pipeline {
                 }
             }
         }
-//         stage('Get API Gateway Endpoint') {
-//             steps {
-//                 withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'e046f63b-a53a-4c53-bbc5-cbcd1c97c379', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-//                     sh "kubectl get svc api-gateway"
-//                 }
-//             }
-//         }
+        stage('Get Cloud Gateway Endpoint') {
+            steps {
+                sh "kubectl get service cloud-gateway"
+            }
+        }
     }
     post {
         always {
