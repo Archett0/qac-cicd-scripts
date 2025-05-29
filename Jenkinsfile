@@ -19,12 +19,12 @@ pipeline {
                 }
             }
         }
-//         stage('OWASP scan') {
-//             steps {
-//                 dependencyCheck additionalArguments: ' --scan ./', nvdCredentialsId: '9274bf55-b151-4a91-ae5b-53d257d790ba', odcInstallation: 'DPC'
-//                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-//             }
-//         }
+        stage('OWASP scan') {
+            steps {
+                dependencyCheck additionalArguments: ' --scan ./', nvdCredentialsId: '9274bf55-b151-4a91-ae5b-53d257d790ba', odcInstallation: 'DPC'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
         stage('Maven build') {
             steps {
                 sh "mvn clean install -DskipTests=true"
@@ -51,11 +51,11 @@ pipeline {
                 }
             }
         }
-//         stage('Trigger CD pipeline') {
-//             steps {
-//                 build wait: false, propagate: false, job: 'smr-cd-pipeline', waitForStart: true
-//             }
-//         }
+        stage('Trigger CD pipeline') {
+            steps {
+                build wait: false, propagate: false, job: 'smr-cd-pipeline', waitForStart: true
+            }
+        }
     }
     post {
         always {
