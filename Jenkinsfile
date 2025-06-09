@@ -51,11 +51,6 @@ pipeline {
                 }
             }
         }
-        stage('Trigger CD pipeline') {
-            steps {
-                build wait: false, propagate: false, job: 'smr-cd-pipeline', waitForStart: true
-            }
-        }
     }
     post {
         always {
