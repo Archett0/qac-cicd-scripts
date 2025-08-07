@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Git checkout') {
             steps {
-                git branch: 'cicd', changelog: false, poll: false, url: 'https://github.com/Archett0/smr-backend.git'
+                git branch: 'master', changelog: false, poll: false, url: 'https://github.com/Archett0/smr-backend.git'
             }
         }
         stage('SonarQube analysis') {
