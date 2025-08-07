@@ -2,6 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: cloud-gateway
+  annotations:
+    beta.cloud.google.com/backend-config: '{"ports": {"80":"cloud-gateway-backendconfig"}}'
 spec:
   selector:
     app: cloud-gateway

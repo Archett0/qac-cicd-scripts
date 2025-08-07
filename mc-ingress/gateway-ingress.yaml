@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gateway-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: gateway-ip
+    networking.gke.io/managed-certificates: gateway-cert
+    kubernetes.io/ingress.allow-http: "false"
+spec:
+  rules:
+    - host: api.smr-properties.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: cloud-gateway
+                port:
+                  number: 80
+ 
