@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-action-service
+  labels:
+    app: user-action-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-action-service
+  template:
+    metadata:
+      name: user-action-service
+      labels:
+        app: user-action-service
+    spec:
+      containers:
+        - name: user-action
+          image: us-central1-docker.pkg.dev/mimetic-codex-460815-g8/smr-repo/useractionservice:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8088
+              protocol: TCP
+          resources:
+            requests:
+              cpu: "100m"
+      restartPolicy: Always
+      

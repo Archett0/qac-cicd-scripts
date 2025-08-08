@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-service
+  labels:
+    app: notification-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notification-service
+  template:
+    metadata:
+      name: notification-service
+      labels:
+        app: notification-service
+    spec:
+      containers:
+        - name: notification
+          image: us-central1-docker.pkg.dev/mimetic-codex-460815-g8/smr-repo/notificationservice:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8083
+              protocol: TCP
+          resources:
+            requests:
+              cpu: "100m"
+      restartPolicy: Always
+      

@@ -48,6 +48,14 @@ pipeline {
                         sh "docker build -t us-central1-docker.pkg.dev/mimetic-codex-460815-g8/smr-repo/userservice:latest ."
                         sh "docker push us-central1-docker.pkg.dev/mimetic-codex-460815-g8/smr-repo/userservice:latest"
                     }
+                    dir('UserActionService') {
+                        sh "docker build -t us-central1-docker.pkg.dev/mimetic-codex-460815-g8/smr-repo/useractionservice:latest ."
+                        sh "docker push us-central1-docker.pkg.dev/mimetic-codex-460815-g8/smr-repo/useractionservice:latest"
+                    }
+                    dir('NotificationService') {
+                        sh "docker build -t us-central1-docker.pkg.dev/mimetic-codex-460815-g8/smr-repo/notificationservice:latest ."
+                        sh "docker push us-central1-docker.pkg.dev/mimetic-codex-460815-g8/smr-repo/notificationservice:latest"
+                    }
                 }
             }
         }
