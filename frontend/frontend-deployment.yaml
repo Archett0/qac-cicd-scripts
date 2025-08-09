@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smr-frontend
+  labels:
+    app: smr-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: smr-frontend
+  template:
+    metadata:
+      name: smr-frontend
+      labels:
+        app: smr-frontend
+    spec:
+      containers:
+        - name: smr-frontend
+          image: us-central1-docker.pkg.dev/mimetic-codex-460815-g8/smr-repo/smrfrontend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          resources:
+            requests:
+              cpu: "100m"
+      restartPolicy: Always
+      

@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Authenticate to GCP') {
+            steps {
+                withCredentials([file(credentialsId: 'smr-k8s-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+                    sh '''
+                        gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
+                        gcloud config set project mimetic-codex-460815-g8
+                        gcloud config set compute/zone us-central1
+                        gcloud container clusters get-credentials smr-cluster
+                    '''
+                }
+            }
+        }
+        stage('Apply to GKE') {
+            steps {
+                dir('frontend') {
+                    sh "kubectl --namespace=default apply -f frontend-deployment.yaml"
+                    sh "kubectl --namespace=default apply -f frontend-service.yaml"
+                }
+            }
+        }
+    }
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}
