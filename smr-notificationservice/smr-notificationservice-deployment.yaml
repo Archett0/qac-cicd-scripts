@@ -22,8 +22,21 @@ spec:
           ports:
             - containerPort: 8083
               protocol: TCP
+          volumeMounts:
+            - name: firebase-sa-key-volume
+              mountPath: "/secrets/firebase"
+              readOnly: true
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /secrets/firebase/smr-back-firebase-adminsdk-fbsvc-a6a2c91210.json
           resources:
             requests:
               cpu: "100m"
       restartPolicy: Always
-      
+      volumes:
+        - name: firebase-sa-key-volume
+          secret:
+            secretName: smr-back-firebase-secret
+            items:
+              - key: smr-back-firebase-adminsdk-fbsvc-a6a2c91210.json
+                path: smr-back-firebase-adminsdk-fbsvc-a6a2c91210.json
