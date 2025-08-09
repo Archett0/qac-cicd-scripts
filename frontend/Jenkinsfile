@@ -1,0 +1,47 @@
+pipeline {
+    agent any
+
+    tools {
+        nodejs "node22"
+    }
+
+    stages {
+        stage('Git checkout') {
+            steps {
+                git credentialsId: 'a400f807-43f1-49bd-b60b-f1a65f9dde13', branch: 'master', changelog: false, poll: false, url: 'https://github.com/Seven0730/smr-frontend.git'
+            }
+        }
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    sh 'npm install'
+                }
+            }
+        }
+        stage('Build Project') {
+            steps {
+                script {
+                    sh 'npm run build'
+                }
+            }
+        }
+        stage('Build and push Docker image') {
+            steps {
+                withCredentials([file(credentialsId: 'gcp-sa-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+                    script {
+                        sh "gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS"
+                        sh "gcloud config set project mimetic-codex-460815-g8"
+                        sh "gcloud auth configure-docker us-central1-docker.pkg.dev"
+                        sh "docker build -t us-central1-docker.pkg.dev/mimetic-codex-460815-g8/smr-repo/smrfrontend:latest ."
+                        sh "docker push us-central1-docker.pkg.dev/mimetic-codex-460815-g8/smr-repo/smrfrontend:latest"
+                    }
+                }
+            }
+        }
+    }
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}
