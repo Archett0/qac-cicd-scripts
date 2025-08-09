@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: search-service
+  labels:
+    app: search-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: search-service
+  template:
+    metadata:
+      name: search-service
+      labels:
+        app: search-service
+    spec:
+      containers:
+        - name: search
+          image: us-central1-docker.pkg.dev/mimetic-codex-460815-g8/smr-repo/searchservice:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8084
+              protocol: TCP
+          resources:
+            requests:
+              cpu: "100m"
+      restartPolicy: Always
+      

@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recommendation-service
+  labels:
+    app: recommendation-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: recommendation-service
+  template:
+    metadata:
+      name: recommendation-service
+      labels:
+        app: recommendation-service
+    spec:
+      containers:
+        - name: recommendation
+          image: us-central1-docker.pkg.dev/mimetic-codex-460815-g8/smr-repo/recommendationservice:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8089
+              protocol: TCP
+          resources:
+            requests:
+              cpu: "100m"
+      restartPolicy: Always
+      

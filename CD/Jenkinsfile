@@ -40,6 +40,14 @@ pipeline {
                     sh "kubectl --namespace=default apply -f smr-notificationservice-deployment.yaml"
                     sh "kubectl --namespace=default apply -f smr-notificationservice-service.yaml"
                 }
+                dir('smr-searchservice') {
+                    sh "kubectl --namespace=default apply -f smr-searchservice-deployment.yaml"
+                    sh "kubectl --namespace=default apply -f smr-searchservice-service.yaml"
+                }
+                dir('smr-recommendationservice') {
+                    sh "kubectl --namespace=default apply -f smr-recommendationservice-deployment.yaml"
+                    sh "kubectl --namespace=default apply -f smr-recommendationservice-service.yaml"
+                }
             }
         }
         stage('Get Cloud Gateway Endpoint') {
