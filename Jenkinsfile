@@ -60,10 +60,6 @@ pipeline {
                         sh "docker build -t us-central1-docker.pkg.dev/mimetic-codex-460815-g8/smr-repo/searchservice:latest ."
                         sh "docker push us-central1-docker.pkg.dev/mimetic-codex-460815-g8/smr-repo/searchservice:latest"
                     }
-                    dir('RecommendationService') {
-                        sh "docker build -t us-central1-docker.pkg.dev/mimetic-codex-460815-g8/smr-repo/recommendationservice:latest ."
-                        sh "docker push us-central1-docker.pkg.dev/mimetic-codex-460815-g8/smr-repo/recommendationservice:latest"
-                    }
                 }
             }
         }
